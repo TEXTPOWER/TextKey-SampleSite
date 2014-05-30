@@ -1,0 +1,371 @@
+/* 
+** Textkey Modal Dialog Styling
+**
+** This is the styling for the TextKey Modal that is displayed. 
+** Make changes here to update the look and feel. 
+**
+** NOTE: The handler is using the jQuery simplemodal extension to display the modal dialog.
+**
+*/
+
+/* powered by logo handling */
+.poweredby {
+	position: absolute;
+	margin-left:370px;
+	margin-top:35px;
+}
+.poweredby img {
+}
+/* header formatting */
+#tkmessage-container h1 {
+	color:#000;
+	font-size:18px;
+	margin:0;
+	padding:0 0 16px 12px;
+	text-align:left;
+}
+/* countdown formatting */
+#tkTime {
+	margin-left:13px;
+	font-size:18px;
+}
+#tkTime p {
+	margin-bottom:12px;
+}
+.bigmsg {
+	font-size:36px;
+	font-weight: bold;
+	letter-spacing:3px;
+	margin-bottom:5px !important;
+	;
+}
+.colorfailed {
+	color:red !important;
+}
+.colorsuccess {
+	color: #0FAF1C;
+!important;
+}
+.colorverify {
+	color: #C9935A;
+!important;
+}
+/*TextKey code displayed formatting */
+#tkCode {
+	font-size:36px;
+	letter-spacing:3px;
+	color:blue !important;
+	margin-bottom:18px !important;
+	;
+}
+/* Modal */
+#basic-modal-content p {
+	font-size:14px;
+}
+/* Overlay */
+#simplemodal-overlay {
+	background-color:#000;
+	cursor:wait;
+}
+/* Container */
+#simplemodal-container {
+	font-family: 'Raleway', 'Lato', Arial, sans-serif;
+	height:160px;
+	width:625px;
+	color:#bbb;
+	background-color:#FFF;
+	border:4px solid #444;
+	padding:12px;
+}
+#simplemodal-container .simplemodal-data {
+	padding:8px;
+}
+#simplemodal-container code {
+	background:#141414;
+	border-left:3px solid #65B43D;
+	color:#bbb;
+	display:block;
+	font-size:12px;
+	margin-bottom:12px;
+	padding:4px 6px 6px;
+}
+#simplemodal-container a {
+	color:#ddd;
+}
+#simplemodal-container a.modalCloseImg {
+	background:url(../images/x.png) no-repeat;
+	width:25px;
+	height:29px;
+	display:inline;
+	z-index:3200;
+	position:absolute;
+	top:-15px;
+	right:-16px;
+	cursor:pointer;
+}
+#simplemodal-container h3 {
+	font-size:18px;
+	color:#0897F1;
+	margin-bottom:4px;
+}
+#simplemodal-container p {
+	color:#272727;
+}
+#simplemodal-container p strong {
+	font-weight:bold;
+	color:#0897F1;
+}
+a.modal-close {
+	color:#999;
+	font-size:18px;
+	font-weight:bold;
+	position:absolute;
+	text-decoration:none;
+	right:8px;
+	top:0px;
+}
+a.modal-close:hover {
+	color:#ccc;
+}
+/* Button */
+.modal-button {
+	/* Size and position */
+    width: 100%;
+	padding: 5px 5px;
+	/* Styles */
+    background: #634056;
+	background: -moz-linear-gradient(rgba(99, 64, 86, 0.5), rgba(76, 49, 65, 0.7));
+	background: -ms-linear-gradient(rgba(99, 64, 86, 0.5), rgba(76, 49, 65, 0.7));
+	background: -o-linear-gradient(rgba(99, 64, 86, 0.5), rgba(76, 49, 65, 0.7));
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(99, 64, 86, 0.5)), to(rgba(76, 49, 65, 0.7)));
+	background: -webkit-linear-gradient(rgba(129, 129, 129, 0.5), rgba(29, 19, 25, 0.7));
+	background: linear-gradient(rgba(99, 64, 86, 0.5), rgba(76, 49, 65, 0.7));
+	border-radius: 5px;
+	border: 1px solid #4e3043;
+	box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), 0 2px 1px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	-webkit-transition: all 0.3s ease-out;
+	-moz-transition: all 0.3s ease-out;
+	-ms-transition: all 0.3s ease-out;
+	-o-transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
+	/* Font styles */
+    color: white;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+	font-size: 12px;
+	font-weight: bold;
+	font-family: 'Raleway', 'Lato', Arial, sans-serif;
+}
+.modal-button:hover {
+	box-shadow: 
+ inset 0 1px rgba(255, 255, 255, 0.2),  inset 0 20px 30px rgba(99, 64, 86, 0.5);
+}
+.modal-buttons {
+	position: absolute;
+	top: 85px;
+	left: 520px;
+}
+.modal-buttons-custom {
+	position: absolute;
+	top: 145px;
+	left: 390px;
+}
+
+/* 
+** Login Page Styling
+**
+** This is the styling for the TextKey Login Demo Page.
+**
+*/
+@import url(http://fonts.googleapis.com/css?family=Raleway:400,700);
+
+header h1 a {
+	display: block;
+	background: url(../images/TextKeyLogo.gif) 0 0 no-repeat;
+	height: 200px;
+	width: 100%;
+	background-position:center;
+	text-indent: -5000px;
+}
+
+.tagline h1 {
+    font-family: 'Raleway', 'Lato', Arial, sans-serif;
+	font-size: 42px;
+}
+
+.tagline #reg {
+    font-family: 'Raleway', 'Lato', Arial, sans-serif;
+	font-size: 22px;
+}
+
+.tagdesc p {
+    font-family: 'Raleway', 'Lato', Arial, sans-serif;
+	font-size: 16px;
+}
+
+.tagdesc h1 {
+    font-family: 'Raleway', 'Lato', Arial, sans-serif;
+	font-size: 42px;
+	color: #0FAF1C;
+}
+
+.tagdesc h2 {
+    font-family: 'Raleway', 'Lato', Arial, sans-serif;
+	font-size: 24px;
+}
+
+.tagdesc h3 {
+    font-family: 'Raleway', 'Lato', Arial, sans-serif;
+	font-size: 18px;
+}
+
+.text-italics {
+	font-style: italic;
+}
+
+body {
+	width:100%;
+	/* background:#fff url(../images/bg-body.gif) 50% 0 repeat; */
+}
+.container > header h1,  .container > header h2 {
+	color: #fff;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+}
+*,
+*:after,
+*:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.form-textkey {
+    /* Size and position */
+    width: 300px;
+    margin: 10px auto 30px;
+    padding: 10px;
+    position: relative;
+
+    /* Font styles */
+    font-family: 'Raleway', 'Lato', Arial, sans-serif;
+    color: grey;
+}
+.form-textkey h1 {
+    font-size: 22px;
+    padding-bottom: 20px;
+}
+.form-textkey input[type=text],
+.form-textkey input[type=password] {
+    /* Size and position */
+    width: 100%;
+    padding: 8px 4px 8px 10px;
+    margin-bottom: 15px;
+
+    /* Styles */
+    border: 1px solid #4e3043; /* Fallback */
+    border: 1px solid rgba(78,48,67, 0.8);
+    background: rgba(128, 119, 119, 0.15);
+    border-radius: 2px;
+    box-shadow: 
+        0 1px 0 rgba(255,255,255,0.2), 
+        inset 0 1px 1px rgba(0,0,0,0.1);
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+
+    /* Font styles */
+    font-family: 'Raleway', 'Lato', Arial, sans-serif;
+    color: rgb(112, 112, 112);
+    font-size: 13px;
+}
+.form-textkey input::-webkit-input-placeholder {
+    color: rgba(37,21,26,0.5);
+    text-shadow: 0 1px 0 rgba(255,255,255,0.15);
+}
+.form-textkey input:-moz-placeholder {
+    color: rgba(37,21,26,0.5);
+    text-shadow: 0 1px 0 rgba(255,255,255,0.15);
+}
+.form-textkey input:-ms-input-placeholder {
+    color: rgba(37,21,26,0.5);
+    text-shadow: 0 1px 0 rgba(255,255,255,0.15);
+}
+.form-textkey input[type=text]:hover,
+.form-textkey input[type=password]:hover {
+    border-color: #333;
+}
+.form-textkey input[type=text]:focus,
+.form-textkey input[type=password]:focus,
+.form-textkey input[type=submit]:focus {
+    box-shadow: 
+        0 1px 0 rgba(255,255,255,0.2), 
+        inset 0 1px 1px rgba(0,0,0,0.1),
+        0 0 0 3px rgba(255,255,255,0.15);
+    outline: none;
+}
+/* Fallback */
+.no-boxshadow .form-textkey input[type=text]:focus,
+.no-boxshadow .form-textkey input[type=password]:focus {
+    outline: 1px solid white;
+}
+.form-textkey input[type=submit] {
+    /* Size and position */
+    width: 100%;
+    padding: 8px 5px;
+
+    /* Styles */
+    background: #634056;
+    background: -moz-linear-gradient(rgba(99,64,86,0.5), rgba(76,49,65,0.7));
+    background: -ms-linear-gradient(rgba(99,64,86,0.5), rgba(76,49,65,0.7));
+    background: -o-linear-gradient(rgba(99,64,86,0.5), rgba(76,49,65,0.7));
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(99,64,86,0.5)), to(rgba(76,49,65,0.7)));
+	background: -webkit-linear-gradient(rgba(129, 129, 129, 0.5), rgba(29, 19, 25, 0.7));
+    background: linear-gradient(rgba(99,64,86,0.5), rgba(76,49,65,0.7));    
+    border-radius: 5px;
+    border: 1px solid #4e3043;
+    box-shadow: inset 0 1px rgba(255,255,255,0.4), 0 2px 1px rgba(0,0,0,0.1);
+    cursor: pointer;
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+
+    /* Font styles */
+    color: white;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.3);
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Raleway', 'Lato', Arial, sans-serif;
+}
+.form-textkey input[type=submit]:hover {
+    box-shadow: 
+        inset 0 1px rgba(255,255,255,0.2), 
+        inset 0 20px 30px rgba(99,64,86,0.5);
+}
+/* Fallback */
+.no-boxshadow .form-textkey input[type=submit]:hover {
+    background: #594642;
+}
+.form-textkey label {
+    display: none;
+    padding: 0 0 5px 2px;
+    cursor: pointer;
+}
+.form-textkey label:hover ~ input {
+    border-color: #333;
+}
+.no-placeholder .form-textkey label {
+    display: block;
+}
+

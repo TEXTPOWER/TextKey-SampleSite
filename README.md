@@ -1,7 +1,7 @@
 TextKey Sample PHP Site
 =======================
 
-This TextKey Sample PHP Site provides an example of how to implement registration and login using the Text REST API.
+This TextKey Sample PHP Site provides an example of how to implement registration and login using the TextKey REST API.
 
 What is included
 ----------------
@@ -118,12 +118,12 @@ The flow consists of the following:
 * The login form submit calls the JS login handler `handlelogin` (i.e. see `login.js`) which makes an AJAX request to `login.php`
 * The server side code (i.e. in `login.php`) handles a 1st pass user/password check and if that passes will request a TextKey for the 2nd pass authentication
 * The AJAX response from `handlelogin` will return back a payload with either an error or the valid TextKey information to display
-* A good response will trigger a call to the `textKeyHandler` JS function (i.e. see textkey_custom.js) which handles displaying the TextKey information to the user
+* A good response will trigger a call to the `textKeyHandler` JS function (i.e. see `textkey_custom.js`) which handles displaying the TextKey information to the user
 * Once the dialog is displayed to the user, a polling mechanism is initiated (i.e. see `showTKModal` in `textkey.js`)
 * The polling handler will either find that a TextKey is received or will timeout
 * Upon finding a reciept of a TextKey, it will attempt to  validate it (i.e. see `validateTextKey` in `textkey.js`) via a server side AJAX request
 * A good validation will call the success handler - set to the `loginSuccess` JS function via the `showTKModal` call
-* A bad validateion will call the error hander - set to the `loginFailed` JS function via the `showTKModal` call
+* A bad validation will call the error hander - set to the `loginFailed` JS function via the `showTKModal` call
 
 ## Login Form submit handling
 
@@ -349,9 +349,9 @@ showTKModal(textKey, shortcode, loginSuccess, loginFailed);
 
 ### Monitor client side via polling to see if the TextKey was received and verify a valid TextKey
 
-The `showTKModal` (i.e. in textkey.js) handles all of the elements of both polling and verification. Upon completion it will call either the `loginSuccess` JS function or the `loginFailed` JS function.
+The `showTKModal` (i.e. in `textkey.js`) handles all of the elements of both polling and verification. Upon completion it will call either the `loginSuccess` JS function or the `loginFailed` JS function.
 
-The verification handler is trigger via the `validateTextKey` JS function. It makes a server side request to make sure that the TextKey received was from the correct phone and that the Verification Code is also correct.
+The verification handler is triggered via the `validateTextKey` JS function. It makes a server side request to make sure that the TextKey received was from the correct phone and that the Verification Code is also correct.
 
 The code in `login.php` that handles this verification is as follows:
 
@@ -449,26 +449,66 @@ function loginSuccess(tkTextKeyMessage, tkTextKeyStatus) {
 function loginFailed(tkTextKeyMessage, tkTextKeyStatus) {
 };
 ```
-**NOTE:** The server side session variables are checked before any page is rendered and if both `passedcheck1` and `passedcheck2` are true, then the user is treated as being logged in. This ensures that any client side manipulation can force an authentication.
+**NOTE:** The server side session variables are checked before any page on the site is rendered and if both `passedcheck1` and `passedcheck2` are true, then the user is treated as being logged in. This ensures that any client side manipulation cannot force an authentication.
+
+For example, in `index.php`, this is the first set of code use to check login status and act appropriately:
+
+```php
+<?php
+include_once("config.php");
+require_once("textkeysite.php");
+
+// Setup
+$loggedIn = false;
+$userName = "";
+
+// Create the session handling object
+$textkeysite = new textkeysite();
+
+// Check to see if the user has fully logged in by passing both checks and then handle the custom code
+$loggedIn = $textkeysite->getPassedTKCheck();
+if ($loggedIn) {
+	$fullName = $textkeysite->get_userName();
+	$userName = $fullName;
+	if (strlen($fullName) > 7) {
+		$userName = substr($fullName, 0, 7) . '...';
+	};
+};
+
+?>
+```
+At those point, the `$loggedIn` variable can be used to determine what to show or not show. For example:
+
+```php
+<?php if (!($loggedIn)): ?>
+
+SHOW THE LOGIN FORM
+
+<?php else: ?>
+
+SHOW THE LOGGED IN INFORMATION
+
+<?php endif; ?>
+```
 
 Testing Code
 ------------
 
-We have included a folder called `tests` in this repository with sample code for some API calls.
+We have included a folder called `tests` in this repository with sample code for some API calls. In each case, just customize the call parameters for testing.
 
-* tk_issuetktest.php - issues a TextKey to a registered user
-* tk_registertest.php - registers a user
-* tk_unregistertest.php - unregisters/deletes a user
-* tk_useridexiststest.php - checks to see if a user exists via their user id
-* tk_validatetktest.php - validate a TextKey using the TextKey and the Validation Code
+* `tk_issuetktest.php` - issues a TextKey to a registered user
+* `tk_registertest.php` - registers a user
+* `tk_unregistertest.php` - unregisters/deletes a user
+* `tk_useridexiststest.php` - checks to see if a user exists via their user id
+* `tk_validatetktest.php` - validate a TextKey using the TextKey and the Validation Code
 
 Contributing to this Sample Site
 --------------------------------
 
 **Issues**
 
-Please discuss issues and features on Github Issues. We'll be happy to answer to your questions and improve the SDK based on your feedback.
+Please discuss issues and features on Github Issues. We'll be happy to answer to your questions and improve the Sample Site based on your feedback.
 
 **Pull requests**
 
-You are welcome to fork this SDK and to make pull requests on Github. We'll review each of them, and integrate in a future release if they are relevant.
+You are welcome to fork this Sample Site and to make pull requests on Github. We'll review each of them, and integrate in a future release if they are relevant.

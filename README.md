@@ -125,6 +125,53 @@ The flow consists of the following:
 * A good validation will call the success handler - set to the `loginSuccess` JS function via the `showTKModal` call
 * A bad validateion will call the error hander - set to the `loginFailed` JS function via the `showTKModal` call
 
+## Login Form submit handling
+
+The Login form submit calls a handler in `login.js` which handles initiating the server side login authentication.
+
+```javascript
+// Submit the form													 
+$.ajax({
+	url: 'login.php',
+	data: $('form').serialize() + '&action=login',
+	type: 'post',
+	cache: false,
+	dataType: 'html',
+	success: function (jsondata) {
+		// Convert to an object
+		data = eval(jsondata);
+		
+		if (typeof(console) !== 'undefined' && console != null) {
+			console.log("data: " + jsondata);
+			console.log(data);
+		};
+
+		// Check for a valid login
+		if (data.error == "") {
+			// Set the flag
+			login.loggedin = true;
+			
+			// Set the textkey values
+			login.textkey = data.textkey;
+			login.textkeyVC = data.textkeyVC;
+			login.shortcode = data.shortcode;
+
+			// Handle the textkey login
+			if (login.loggedin) {
+				textKeyHandler(login.textkey, login.shortcode);
+			};
+		}
+		else {
+			// Set the error message
+			login.message = data.error;
+			
+			// Show the error message
+			login.showError();
+		};
+	},
+	error: login.error
+});
+```
 ## 1st pass authenticaion
 
 This is just an example of how to implement TextKey so we don't have it linked to a 1st pass authentication (i.e. a username/password check for example). Instead we have a function called `user_password_login($name, $password, $tk)` that will simulate the action. In a production environment site, this would actually handle the username and password authentication and return back the unique id that the account is tied to. In our case, we tied the account to the `User Name` when we registered the user however this can be any key you would like to use.
@@ -246,14 +293,166 @@ $textkeysite->setTextKeyInfo($textkey_userid, $textkey_result->textKey,  $textke
 
 ### Display the TextKey and short code for the user to text to
 
-At this point, we 
+At this point, we return back either an error payload or a valid payload with the TextKey information. The login handler gets the TextKey information and passes it onto the `textKeyHandler` function.
 
-### Monitor client side via polling to see if the TextKey was received
+```javascript
+// Check for a valid login
+if (data.error == "") {
+	// Set the flag
+	login.loggedin = true;
+	
+	// Set the textkey values
+	login.textkey = data.textkey;
+	login.textkeyVC = data.textkeyVC;
+	login.shortcode = data.shortcode;
+	
+	// Handle the textkey login
+	if (login.loggedin) {
+		textKeyHandler(login.textkey, login.shortcode);
+	};
+}
+```
+The `textKeyHandler` (i.e. in `textkey_custom.js`) handles setting up the styling and content of the display dialog, the time to poll for a TextKey response, and the success and failure callback handlers. 
 
-### Once received verify that it is valid and came from the correct phone
+This code sets the styling and content of the dialog:
 
-Sample Code
------------
+```javascript
+// Customize the look and feel
+setTextKeyHTML('<div id="tkmessage-container"><h1>Mobile Authentication...</h1><div class="poweredby"><img src="images/poweredbylocked.gif" alt="Powered by TextPower" border="0" align="absmiddle"></div><div id="tkSound"></div><div id="tkTime"></div></div>');
+setTextKeyContainerCss({'height':'260px', 
+						'width':'625px', 
+						'font': '16px/22px \'Raleway\', \'Lato\', Arial, sans-serif',
+						'color':'#000000', 
+						'background-color':'#000', 
+						'padding':'10px', 
+						'background-color':'#F1F1F1', 
+						'margin':'0', 
+						'padding':'0',
+						'border':'4px solid #444'});
+setTextKeyDataCss({'padding':'8px'});
+setTextKeyOverlayCss({'background-color':'#AAA', 'cursor':'wait'});
+```
+
+This code setups up the polling timeout in seconds:
+
+```javascript
+// Set the total time to wait for TextKey to 120 seconds
+setPollTime(120);
+```
+
+This code displays the dialog and initiates polling:
+
+```javascript
+// Show the TextKey Modal and handle the checking
+showTKModal(textKey, shortcode, loginSuccess, loginFailed);
+```
+
+### Monitor client side via polling to see if the TextKey was received and verify a valid TextKey
+
+The `showTKModal` (i.e. in textkey.js) handles all of the elements of both polling and verification. Upon completion it will call either the `loginSuccess` JS function or the `loginFailed` JS function.
+
+The verification handler is trigger via the `validateTextKey` JS function. It makes a server side request to make sure that the TextKey received was from the correct phone and that the Verification Code is also correct.
+
+The code in `login.php` that handles this verification is as follows:
+
+```php
+// Check to make sure pass 1 worked (i.e. username/pasword authentication)
+$loggedIn = $textkeysite->getPassedLoginCheck();
+if ($loggedIn) {
+	// Get the session values from the textkey validation and check to make sure they are good
+	$textkeyvc = $textkeysite->get_textkeyvc();
+	$tkuserId = $textkeysite->get_tkuserId();
+	$textkey = $textkeysite->get_textkey();
+	
+	// Create the textkey object
+	$tk = new textKey(TK_API);
+	
+	// Validate the TextKey to ensure it was the original one with the TextKey validation code
+	$textkey_result = $tk->perform_ValidateTextKeyFromUserId($tkuserId, $textkey, $textkeyvc, TK_ISHASHED);
+	if ($textkey_result->errorDescr === "") {
+		// Check for an error
+		$validationErrors = $textkey_result->validationErrors;
+		foreach($validationErrors as $key => $value) { 
+			switch ($value) {
+				case "textKeyNoError":
+					// No error so setup the return payload
+					$error_msg = '({"error":"", "validated":' . json_encode($textkey_result->validated) . '})';
+
+					// Handle setting the sesssion info.
+					$textkeysite->setPassedTKCheck();
+				break;
+				case "textKeyNotFound":
+					$error_msg = '({"error": "The TextKey sent was not valid."})';
+				break;
+				case "textKeyNotReceived":
+					$error_msg = '({"error": "The TextKey was never received."})';
+				break;
+				case "textKeyFraudDetect":
+					$error_msg = '({"error": "Fraud Detected - The TextKey was not sent by the authorized device."})';
+				break;
+				case "noRegistrationFound":
+					$error_msg = '({"error": "The TextKey was received but it was not assigned to a registered user."})';
+				break;
+				case "validationCodeInvalid":
+					$error_msg = '({"error": "The TextKey was received but the validation code was invalid."})';
+				break;
+				case "textKeyTooOld":
+					$error_msg = '({"error": "The TextKey was received but had already expired."})';
+				break;
+				case "textKeyError":
+					$error_msg = '({"error": "An innternal TextKey error occured."})';
+				break;
+				case "textKeyNotValidated":
+					$error_msg = '({"error": "The TextKey was not validated."})';
+				break;
+				case "pinCodeError":
+					$error_msg = '({"error": "A Pin Code error occured."})';
+				break;
+				default:
+					$error_msg = '({"error": "An error occured while trying to verify the TextKey."})';
+				break;
+			}
+		} 			
+	}
+	else {
+		$error_msg = $textkey_result->errorDescr;
+		$error_msg = '({"error":' . json_encode($error_msg) . '})';
+	}
+}
+else {
+	$error_msg = "Error logging in user: User/Password validation was not finalized.";		
+	$error_msg = '({"error":' . json_encode($error_msg) . '})';
+}
+```
+
+The code ensures that pass 1 was already successful. Then it verifies the TextKey values via the session values. Finally, it handles the verification response.
+
+The final step if everything is good is to set the `passedcheck2` session flag to be true to let the site know that this user is logged in.
+
+```php
+// Handle setting the sesssion info.
+$textkeysite->setPassedTKCheck();
+```
+
+
+### After success or failure
+
+Both callback handlers are in `textkey_custom.js` and should be modified as necessary to act appropriately. In this case, a successful login just reloads the page and a failure does nothing. The messaging to the user in the dialog will update them on the status and will display an error message if login was not successful.
+
+```javascript
+// Call to handle the successful authentication
+function loginSuccess(tkTextKeyMessage, tkTextKeyStatus) {
+	location.reload(true);
+};
+
+// Call to handle the failed authentication
+function loginFailed(tkTextKeyMessage, tkTextKeyStatus) {
+};
+```
+**NOTE:** The server side session variables are checked before any page is rendered and if both `passedcheck1` and `passedcheck2` are true, then the user is treated as being logged in. This ensures that any client side manipulation can force an authentication.
+
+Testing Code
+------------
 
 We have included a folder called `tests` in this repository with sample code for some API calls.
 
@@ -263,8 +462,8 @@ We have included a folder called `tests` in this repository with sample code for
 * tk_useridexiststest.php - checks to see if a user exists via their user id
 * tk_validatetktest.php - validate a TextKey using the TextKey and the Validation Code
 
-Contributing to this SDK
-------------------------
+Contributing to this Sample Site
+--------------------------------
 
 **Issues**
 

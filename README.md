@@ -6,6 +6,8 @@ This TextKey Sample PHP Site provides an example of how to implement registratio
 What is included
 ----------------
 
+Here are the key elements in this repository.
+
 * User Registration - registeruser.php
 * User Login - index.php
 * tests folder - sample code using the TextKey API
@@ -13,7 +15,7 @@ What is included
 Configuration Settings
 ----------------------
 
-The Sample Site configuration file is called `config.php`. The only item you will need to setup to setup the Sample SIte is your API Key. Just replace YOUR_API_KEY with your API Key:
+The Sample Site configuration file is called `config.php`. The only item you will need to setup for the Sample SIte is your API Key. Just replace `YOUR_API_KEY` with your actual TextKey API Key:
 
 ```php
 /*
@@ -22,14 +24,14 @@ The Sample Site configuration file is called `config.php`. The only item you wil
 define('TK_API', 'YOUR_API_KEY');
 define('TK_DISPLAY_API', TK_API);
 ```
-** NOTE:** You can get a developer API by going to the TextKey developer site at [http://developer.textkey.com/] and registering for an account. Once you have created an account, you can get a Developer API Key by going to User Settings and following the instructions on the API Information tab.
+**NOTE:** You can get a developer API Key by going to the TextKey developer site at [TextKey Devloper Site Registration](http://developer.textkey.com/register.php) and registering for an account. Once you have created an account and are logged in, you can get a Developer API Key by going to the user settings page (in the user menu on the upper left) and following the instructions on the `API Information` tab.
 
-The `Output Settings` options appy to the items in the tests folder which is using the `textkey_rest_debug.php` library.
+The `Output Settings` options in the `config.php` only appy to the items in the tests folder which is using the `textkey_rest_debug.php` library. The code in that folder can be used to test certain TextKey API calls relevant to this site.
 
-To display output, turn on the deugging flag by setting it to true.
+To display test output, turn on the debugging flag by setting it to true.
 
 ```php
-define('DEBUGGING', true);		// Turn this on to show output
+define('DEBUGGING', true);	// Turn this on to show output
 ```
 
 To define the level of details, set OUTPUT_STATE. 
@@ -39,7 +41,7 @@ You have 3 options:
 ```php
 define('OUTPUT_PLAYLOAD', 0);	// Just show the output payload
 define('OUTPUT_LIMITED', 1);	// Show more details about the API call
-define('OUTPUT_FULL', 2);		// Show all detials about the API call
+define('OUTPUT_FULL', 2);	// Show all detials about the API call
 ```
 
 Each of the tests will use one of the 3 options to set the OUTPUT_STATE constant.
@@ -58,35 +60,41 @@ define('OUTPUT_STATE', OUTPUT_FULL);
 Registering a user
 ------------------
 
-The first step in testing out the Sample Site is to register a user. In order for TextKey to be able to verify an incoming TextKey and the associated phone, it must be registered under the account tied to the API Key. You can do that via the `registeruser.php' page:
+The first step in testing out the Sample Site is to register a user. In order for TextKey to be able to verify an incoming TextKey and the associated phone, it must be registered under the account tied to the API Key. 
 
-![Image of TextKey Sample Site User Registration](http://developer.textkey.com/images/ss_register_user.jpg =200x200)
+You can do that via the `registeruser.php` page:
 
-This page utilizes the code in `register.php` to make a request to the `registerTextKeyUser` API call using the `AddChange` Command to add the user using the `User Name` and `Mobile Number` you enter. You can look at more details on the call at [http://developer.textkey.com/apidocpg_registertextkeyuser.php] or [http://developer.textkey.com/apidocpg_registertextkeyusercsa.php] on the TextKey developer site.
+![Sample Site Registration](http://developer.textkey.com/images/ss_register_user.jpg)
+
+This registration page utilizes the code in `register.php` to make a request to the `registerTextKeyUser` API call using the `AddChange` Command value to add the user using the `User Name` and `Mobile Number` that was entered. 
+
+You can look at more details on the call at [registerTextKeyUser API Call](http://developer.textkey.com/apidocpg_registertextkeyuser.php) or [registerTextKeyUserCSA API Call](http://developer.textkey.com/apidocpg_registertextkeyusercsa.php) on the TextKey developer site.
+
+Here is the code snippet that handles the registration:
 
 ```php
-	// Handle the TextKey Registration
-	$tk = new textKey(TK_API);
-	
-	// Setup
-	$Command = "AddChange";
-	$CellNumber = $mobile;
-	$OwnerFName = $name;
-	$OwnerLName = $name;
-	$RegUserID = $name;
-	$Suppl1 = "";
-	$Suppl2 = "";
-	$isHashed = TK_ISHASHED;
-	$PinCode = "";
-	$DistressPinCode = "";
-	$TextKeyMode = "TextKeyOnly";
-	$ReceiveMode = "AnyCode";
+// Handle the TextKey Registration
+$tk = new textKey(TK_API);
 
-	// Handle the operation
-	$textkey_result = $tk->perform_registerTextKeyUser($Command, $CellNumber, $OwnerFName, $OwnerLName, $Suppl1, $Suppl2, $RegUserID, $isHashed, $PinCode, $DistressPinCode, $TextKeyMode, $ReceiveMode);
-	if ($textkey_result->errorDescr != "") {
-		$error_msg = $textkey_result->errorDescr . TK_NEWLINE;
-	}
+// Setup
+$Command = "AddChange";
+$CellNumber = $mobile;
+$OwnerFName = $name;
+$OwnerLName = $name;
+$RegUserID = $name;
+$Suppl1 = "";
+$Suppl2 = "";
+$isHashed = TK_ISHASHED;
+$PinCode = "";
+$DistressPinCode = "";
+$TextKeyMode = "TextKeyOnly";
+$ReceiveMode = "AnyCode";
+
+// Handle the operation
+$textkey_result = $tk->perform_registerTextKeyUser($Command, $CellNumber, $OwnerFName, $OwnerLName, $Suppl1, $Suppl2, $RegUserID, $isHashed, $PinCode, $DistressPinCode, $TextKeyMode, $ReceiveMode);
+if ($textkey_result->errorDescr != "") {
+	$error_msg = $textkey_result->errorDescr . TK_NEWLINE;
+}
 ```
 
 Logging in via TextKey 
@@ -94,16 +102,28 @@ Logging in via TextKey
 
 One you have a registered user, you can try logging them in via the login page at `index.php`. Most of the server-side login handling is done in the `login.php` code.
 
-![Image of TextKey Sample Site User Login](http://developer.textkey.com/images/ss_login_user.jpg =200x200)
+![Sample Site Registration](http://developer.textkey.com/images/ss_login_user.jpg)
 
 The flow consists of the following:
 
 * 1st pass authenticaion - Validating the User Name/Password combination
 * 2nd pass authentication - Once the 1st pass is verified, the TextKey authentication comes into play
-** Get a valid TextKey for the specific user
-** Display the TextKey and short code for the user to text to
-** Monitor client side via polling to see if the TextKey was received
-** Once received verify that it is valid and came from the correct phone
+  * Get a valid TextKey for the specific user
+  * Display the TextKey and short code for the user to text to
+  * Monitor client side via polling to see if the TextKey was received
+  * Once received verify that it is valid and came from the correct phone
+
+## Basic Code Flow
+
+* The login form submit calls the JS login handler `handlelogin` (i.e. see `login.js`) which makes an AJAX request to `login.php`
+* The server side code (i.e. in `login.php`) handles a 1st pass user/password check and if that passes will request a TextKey for the 2nd pass authentication
+* The AJAX response from `handlelogin` will return back a payload with either an error or the valid TextKey information to display
+* A good response will trigger a call to the `textKeyHandler` JS function (i.e. see textkey_custom.js) which handles displaying the TextKey information to the user
+* Once the dialog is displayed to the user, a polling mechanism is initiated (i.e. see `showTKModal` in `textkey.js`)
+* The polling handler will either find that a TextKey is received or will timeout
+* Upon finding a reciept of a TextKey, it will attempt to  validate it (i.e. see `validateTextKey` in `textkey.js`) via a server side AJAX request
+* A good validation will call the success handler - set to the `loginSuccess` JS function via the `showTKModal` call
+* A bad validateion will call the error hander - set to the `loginFailed` JS function via the `showTKModal` call
 
 ## 1st pass authenticaion
 
@@ -197,7 +217,7 @@ $textkeysite->setPassedLoginCheck($name, $textkey_userid, $tk->tk_textkey);
 
 ### Get a valid TextKey for the specific user
 
-Once the 1st pass has been handled, the `login_user()` function will take care of assigning a TextKey based on the `user id` linked to the TextKey registered user and then passing it back to the client-side handle to display the message to the user.
+Once the 1st pass has been handled, the `login_user()` function will take care of assigning a TextKey based on the `user id` linked to the TextKey registered user and then passing it back to the client-side handler to display the message to the user.
 
 ```php
 // Handle getting a valid TextKey using the user id
@@ -217,7 +237,7 @@ else {
 }
 ```
 
-At this point, if we would set the server side session variables to hold the TextKey information for later verification. At this point, the login code sets the `textkeycheckuserid`, `textkey`, `textkeyvc` and `shortcode` values however `passedcheck2` would still be set to false.
+At this point, we also set the server side session variables to hold the TextKey information for later verification. We set the `textkeycheckuserid`, `textkey`, `textkeyvc` and `shortcode` session variables however `passedcheck2` would still be set to false.
 
 ```php
 // Handle setting the textkey sesssion info.
@@ -225,6 +245,8 @@ $textkeysite->setTextKeyInfo($textkey_userid, $textkey_result->textKey,  $textke
 ```
 
 ### Display the TextKey and short code for the user to text to
+
+At this point, we 
 
 ### Monitor client side via polling to see if the TextKey was received
 

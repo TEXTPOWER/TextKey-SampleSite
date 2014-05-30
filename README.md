@@ -3,6 +3,8 @@ TextKey Sample PHP Site
 
 This TextKey Sample PHP Site provides an example of how to implement registration and login using the TextKey REST API.
 
+You can find a functioning version of this Sample Site Demo at [TextKey Sample Site](http://developer.textkey.com/samplesite_demo/). Please feel free to try it out.
+
 What is included
 ----------------
 
@@ -24,7 +26,7 @@ The Sample Site configuration file is called `config.php`. The only item you wil
 define('TK_API', 'YOUR_API_KEY');
 define('TK_DISPLAY_API', TK_API);
 ```
-**NOTE:** You can get a developer API Key by going to the TextKey developer site at [TextKey Devloper Site Registration](http://developer.textkey.com/register.php) and registering for an account. Once you have created an account and are logged in, you can get a Developer API Key by going to the user settings page (in the user menu on the upper left) and following the instructions on the `API Information` tab.
+**NOTE:** You can get a developer API Key by going to the TextKey developer site at [TextKey Developer Site Registration](http://developer.textkey.com/register.php) and registering for an account. Once you have created an account and are logged in, you can get a Developer API Key by going to the user settings page (in the user menu on the upper left) and following the instructions on the `API Information` tab.
 
 The `Output Settings` options in the `config.php` only appy to the items in the tests folder which is using the `textkey_rest_debug.php` library. The code in that folder can be used to test certain TextKey API calls relevant to this site.
 
